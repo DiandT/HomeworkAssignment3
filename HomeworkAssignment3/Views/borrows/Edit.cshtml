@@ -1,64 +1,61 @@
-﻿@model HomeworkAssignment3.borrow
-
-@{
-    ViewBag.Title = "Edit";
+﻿@model HomeworkAssignment3.Models.Borrow
+    ViewBag.Title = "Edit Borrow";
 }
 
-<h2>Edit</h2>
-
+<h2>Edit Borrow</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>borrow</h4>
+        <h4>Borrow</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.borrowId)
+        @Html.HiddenFor(model => model.BorrowId) // Corrected casing for property name
 
         <div class="form-group">
-            @Html.LabelFor(model => model.studentId, "studentId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.StudentId, "Student", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("studentId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.studentId, "", new { @class = "text-danger" })
+                @Html.DropDownList("StudentId", new SelectList(ViewBag.Students, "StudentId", "Name", Model.StudentId), "Select Student", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StudentId, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.bookId, "bookId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.BookId, "Book", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("bookId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.bookId, "", new { @class = "text-danger" })
+                @Html.DropDownList("BookId", new SelectList(ViewBag.Books, "BookId", "Name", Model.BookId), "Select Book", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BookId, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.takenDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.TakenDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.takenDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.takenDate, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.TakenDate, new { htmlAttributes = new { @class = "form-control", type = "date" } }) // Set type to date for better UX
+                @Html.ValidationMessageFor(model => model.TakenDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.broughtDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.BroughtDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.broughtDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.broughtDate, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.BroughtDate, new { htmlAttributes = new { @class = "form-control", type = "date" } }) // Set type to date for better UX
+                @Html.ValidationMessageFor(model => model.BroughtDate, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-primary" /> <!-- Changed button class for a more prominent appearance -->
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" }) <!-- Added styling to the ActionLink -->
 </div>
 
 @section Scripts {

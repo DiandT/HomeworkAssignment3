@@ -31,13 +31,14 @@
                                     <td>@author.Name</td>
                                     <td>@author.Surname</td>
                                     <td>
-                                        <button class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Edit", "authors", new { id = author.AuthorId })'">
+                                        <button class="btn btn-primary btn-sm openModal" data-title="Edit Author" href="@Url.Action("Edit", "authors", new { id = author.AuthorId })">
                                             <i class="fas fa-edit"></i> Edit
                                         </button>
-                                        <button class="btn btn-danger btn-sm" onclick="location.href='@Url.Action("Delete", "authors", new { id = author.AuthorId })'">
+                                        <button class="btn btn-danger btn-sm openModal" data-title="Delete Author" href="@Url.Action("Delete", "authors", new { id = author.AuthorId })">
                                             <i class="fas fa-trash-alt"></i> Delete
                                         </button>
                                     </td>
+
                                 </tr>
                             }
                         </tbody>

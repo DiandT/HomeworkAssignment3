@@ -55,19 +55,16 @@ namespace HomeworkAssignment3.Controllers
         }
 
         // GET: authors/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public async Task<ActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var author = await db.Authors.FindAsync(id);
             if (author == null)
             {
                 return HttpNotFound();
             }
-            return View(author); // Return the normal view instead of a partial view
+            return PartialView("Edit", author); // Use a partial view for editing
         }
+
 
         // POST: authors/Edit/5
         [HttpPost]
@@ -84,18 +81,18 @@ namespace HomeworkAssignment3.Controllers
         }
 
         // GET: authors/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        public async Task<ActionResult> Delete(int id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var author = await db.Authors.FindAsync(id);
+            Author author = await db.Authors.FindAsync(id);
             if (author == null)
             {
                 return HttpNotFound();
             }
-            return View(author); // Return the normal view instead of a partial view
+            return PartialView(author); // Return a partial view for modal
         }
 
         // POST: authors/Delete/5
