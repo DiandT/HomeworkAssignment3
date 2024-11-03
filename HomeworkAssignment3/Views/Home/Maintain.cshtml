@@ -1,0 +1,180 @@
+﻿@model HomeworkAssignment3.Models.AdminViewModel
+@using PagedList.Mvc;
+@using PagedList;
+
+<div class="container my-4">
+    <h2 class="text-center mb-4">Maintain Records</h2>
+
+    <div class="row">
+        <!-- Authors Section -->
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title">Authors</h3>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-success btn-sm openModal mb-3" data-title="Add Author" href="@Url.Action("Create", "authors")">
+                        <i class="fas fa-plus"></i> Add Author
+                    </button>
+                    <table class="table table-hover table-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var author in Model.Authors)
+                            {
+                                <tr>
+                                    <td>@author.Name</td>
+                                    <td>@author.Surname</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm" onclick="location.href='@Url.Action("Edit", "authors", new { id = author.AuthorId })'">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </button>
+                                        <button class="btn btn-danger btn-sm" onclick="location.href='@Url.Action("Delete", "authors", new { id = author.AuthorId })'">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="pagination-container">
+                        @Html.PagedListPager(Model.Authors, page => Url.Action("Maintain", new { pageAuthors = page, pageTypes = Model.Types.PageNumber, pageBorrows = Model.Borrows.PageNumber }))
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Types Section -->
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title">Types</h3>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-success btn-sm openModal mb-3" data-title="Add Type" href="@Url.Action("Create", "types")">
+                        <i class="fas fa-plus"></i> Add Type
+                    </button>
+                    <table class="table table-hover table-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var type in Model.Types)
+                            {
+                                <tr>
+                                    <td>@type.Name</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm openModal" data-title="Edit Type" href="@Url.Action("Edit", "types", new { id = type.TypeId })">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </button>
+                                        <button class="btn btn-danger btn-sm openModal" data-title="Delete Type" href="@Url.Action("Delete", "types", new { id = type.TypeId })">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="pagination-container">
+                        @Html.PagedListPager(Model.Types, page => Url.Action("Maintain", new { pageAuthors = Model.Authors.PageNumber, pageTypes = page, pageBorrows = Model.Borrows.PageNumber }))
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Borrows Section -->
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title">Borrows</h3>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-success btn-sm openModal mb-3" data-title="Add Borrow" href="@Url.Action("Create", "borrows")">
+                        <i class="fas fa-plus"></i> Add Borrow
+                    </button>
+                    <table class="table table-hover table-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Book</th>
+                                <th>Student</th>
+                                <th>Taken Date</th>
+                                <th>Brought Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var borrow in Model.Borrows)
+                            {
+                                <tr>
+                                    <td>@borrow.Book.Name</td>
+                                    <td>@borrow.Student.Name</td>
+                                    <td>@borrow.TakenDate.ToShortDateString()</td>
+                                    <td>@borrow.BroughtDate.ToShortDateString()</td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm openModal" data-title="Edit Borrow" href="@Url.Action("Edit", "borrows", new { id = borrow.BorrowId })">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </button>
+                                        <button class="btn btn-danger btn-sm openModal" data-title="Delete Borrow" href="@Url.Action("Delete", "borrows", new { id = borrow.BorrowId })">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div class="pagination-container">
+                        @Html.PagedListPager(Model.Borrows, page => Url.Action("Maintain", new { pageAuthors = Model.Authors.PageNumber, pageTypes = Model.Types.PageNumber, pageBorrows = page }))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Content will load here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).on('click', '.openModal', function (e) {
+            e.preventDefault();
+            var title = $(this).data('title');
+            $('#modalDialog').find('.modal-title').text(title);
+
+            // Load the content into the modal body
+            $('#modalDialog').modal('show')
+                .find('.modal-body')
+                .load($(this).attr('href'), function (response, status, xhr) {
+                    if (status === "error") {
+                        var msg = "Sorry, there was an error: ";
+                        $("#modalDialog .modal-body").html(msg + xhr.status + " " + xhr.statusText);
+                    }
+                });
+        });
+    </script>
+}

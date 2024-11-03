@@ -1,0 +1,109 @@
+﻿@model IEnumerable<HomeworkAssignment3.Models.StudentBorrowingRankingViewModel>
+
+@{
+    ViewBag.Title = "Student Borrowing Ranking";
+}
+
+<div class="container my-4">
+    <h2 class="text-center mb-4">Student Borrowing Ranking</h2>
+
+    <!-- Date Range Form -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="card-title">Generate Report</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" action="@Url.Action("StudentBorrowingRanking", "Report")" class="form-inline">
+                <div class="form-group mr-3">
+                    <label for="startDate" class="mr-2">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate" class="form-control" value="@ViewBag.StartDate?.ToString(" yyyy-MM-dd")" />
+                </div>
+
+                <div class="form-group mr-3">
+                    <label for="endDate" class="mr-2">End Date:</label>
+                    <input type="date" id="endDate" name="endDate" class="form-control" value="@ViewBag.EndDate?.ToString(" yyyy-MM-dd")" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Generate Report</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ranking Table -->
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Rank</th>
+                        <th>Student Name</th>
+                        <th>Borrow Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int rank = 1;
+                        foreach (var entry in Model)
+                        {
+                            <tr>
+                                <td>@rank</td>
+                                <td>@entry.StudentName</td>
+                                <td>@entry.BorrowCount</td>
+                            </tr>
+                            rank++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No data available for the selected date range.
+        </div>
+    }
+
+    <!-- Export Form -->
+    <div class="card shadow-sm mt-4">
+        <div class="card-header bg-secondary text-white">
+            <h4 class="card-title">Export Report</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" action="@Url.Action("ExportStudentBorrowingRanking", "Report")">
+                <input type="hidden" name="startDate" value="@ViewBag.StartDate?.ToString(" yyyy-MM-dd")" />
+                <input type="hidden" name="endDate" value="@ViewBag.EndDate?.ToString(" yyyy-MM-dd")" />
+
+                <div class="form-group">
+                    <label for="fileName">File Name:</label>
+                    <input type="text" id="fileName" name="fileName" class="form-control" required placeholder="Enter file name for export" />
+                </div>
+
+                <div class="form-group mt-2">
+                    <label for="fileType">File Type:</label>
+                    <select id="fileType" name="fileType" class="form-control">
+                        <option value="txt">TXT</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                </div>
+
+                <!-- Description Textarea with CKEditor -->
+                <div class="form-group mt-2">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" class="form-control"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-secondary mt-3">Export</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- CKEditor Integration -->
+<script src="https://cdn.ckeditor.com/4.16.0/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('description', {
+        resize_enabled: true
+    });
+</script>

@@ -1,0 +1,14 @@
+﻿@model HomeworkAssignment3.Models.Author
+
+<div>
+    <h4>Delete Author</h4>
+    <p>Are you sure you want to delete the author <strong>@Model.Name @Model.Surname</strong>?</p>
+    @using (Html.BeginForm("DeleteConfirmed", "Authors", FormMethod.Post, new { @id = "deleteAuthorForm" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.AuthorId)
+
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+    }
+</div>
