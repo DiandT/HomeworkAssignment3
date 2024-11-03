@@ -1,5 +1,5 @@
 ﻿@model HomeworkAssignment3.Models.Borrow 
-    ViewBag.Title = "Delete Borrow";
+    
 }
 
 <h2>Delete Borrow</h2>
@@ -10,7 +10,7 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.TakenDate) // Corrected casing for property names
+            @Html.DisplayNameFor(model => model.TakenDate)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.TakenDate)
@@ -24,14 +24,14 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Book.Name) // Corrected casing and structure
+            @Html.DisplayNameFor(model => model.Book.Name) 
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Book.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Student.Name) // Corrected casing and structure
+            @Html.DisplayNameFor(model => model.Student.Name) 
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Student.Name)

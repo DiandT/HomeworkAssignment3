@@ -28,7 +28,8 @@ namespace HomeworkAssignment3.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var borrow = await db.Borrows.Include(b => b.Book).Include(b => b.Student).FirstOrDefaultAsync(b => b.BorrowId == id);
+            var borrow = await db.Borrows.Include(b => b.Book).Include(b => b.Student)
+                                         .FirstOrDefaultAsync(b => b.BorrowId == id);
             if (borrow == null)
             {
                 return HttpNotFound();
@@ -41,10 +42,9 @@ namespace HomeworkAssignment3.Controllers
         public ActionResult Create()
         {
             ViewBag.BookId = new SelectList(db.Books, "BookId", "Name");
-            ViewBag.StudentId = new SelectList(db.Students, "StudentId", "Name"); // Populate StudentId
+            ViewBag.StudentId = new SelectList(db.Students, "StudentId", "Name");
             return View();
         }
-
 
         // POST: Borrows/Create
         [HttpPost]
@@ -70,15 +70,15 @@ namespace HomeworkAssignment3.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Borrow borrow = await db.Borrows.FindAsync(id);
             if (borrow == null)
             {
                 return HttpNotFound();
             }
 
-            // Populate ViewBag.Students and ViewBag.Books before returning the view
             ViewBag.BookId = new SelectList(db.Books, "BookId", "Name", borrow.BookId);
-            ViewBag.StudentId = new SelectList(db.Students, "StudentId", "Name", borrow.StudentId); // Populate StudentId
+            ViewBag.StudentId = new SelectList(db.Students, "StudentId", "Name", borrow.StudentId);
             return View(borrow);
         }
 
@@ -107,7 +107,8 @@ namespace HomeworkAssignment3.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var borrow = await db.Borrows.Include(b => b.Book).Include(b => b.Student).FirstOrDefaultAsync(b => b.BorrowId == id);
+            var borrow = await db.Borrows.Include(b => b.Book).Include(b => b.Student)
+                                         .FirstOrDefaultAsync(b => b.BorrowId == id);
             if (borrow == null)
             {
                 return HttpNotFound();
@@ -126,6 +127,11 @@ namespace HomeworkAssignment3.Controllers
             {
                 db.Borrows.Remove(borrow);
                 await db.SaveChangesAsync();
+            }
+            else
+            {
+                // Log or handle case where borrow is not found
+                ModelState.AddModelError("", "Error: Borrow record could not be found.");
             }
             return RedirectToAction("Index");
         }

@@ -1,50 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using HomeworkAssignment3;
 
 namespace HomeworkAssignment3.Controllers
 {
-    public class typesController : Controller
+    public class TypesController : Controller
     {
-        private LibraryEntities db = new LibraryEntities();
+        private readonly LibraryEntities db = new LibraryEntities();
 
-        // GET: types
+        // GET: Types
         public async Task<ActionResult> Index()
         {
             return View(await db.types.ToListAsync());
         }
 
-        // GET: types/Details/5
+        // GET: Types/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            type type = await db.types.FindAsync(id);
+
+            var type = await db.types.FindAsync(id);
             if (type == null)
             {
                 return HttpNotFound();
             }
+
             return View(type);
         }
 
-        // GET: types/Create
+        // GET: Types/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: types/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Types/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "typeId,name")] type type)
@@ -59,24 +55,24 @@ namespace HomeworkAssignment3.Controllers
             return View(type);
         }
 
-        // GET: types/Edit/5
+        // GET: Types/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            type type = await db.types.FindAsync(id);
+
+            var type = await db.types.FindAsync(id);
             if (type == null)
             {
                 return HttpNotFound();
             }
+
             return View(type);
         }
 
-        // POST: types/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Types/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "typeId,name")] type type)
@@ -87,34 +83,52 @@ namespace HomeworkAssignment3.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+
             return View(type);
         }
 
-        // GET: types/Delete/5
+        // GET: Types/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            type type = await db.types.FindAsync(id);
+
+            var type = await db.types.FindAsync(id);
             if (type == null)
             {
                 return HttpNotFound();
             }
+
             return View(type);
         }
 
-        // POST: types/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            type type = await db.types.FindAsync(id);
-            db.types.Remove(type);
-            await db.SaveChangesAsync();
+            try
+            {
+                var type = await db.types.FindAsync(id);
+                if (type == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.NotFound, "Type record could not be found.");
+                }
+
+                db.types.Remove(type);
+                await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (use your preferred logging approach)
+                Console.WriteLine(ex.Message); // or use a logging library
+                return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "Error deleting the record.");
+            }
+
             return RedirectToAction("Index");
         }
+
 
         protected override void Dispose(bool disposing)
         {
